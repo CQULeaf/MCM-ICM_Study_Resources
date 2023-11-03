@@ -1,5 +1,5 @@
 # MCM-ICM-Custom-Preparation
-This repository was created to collect the materials during our preparation period for the MCM/ICM. All the materials are custom and all the efforts are from Xuhang Ye (captain, programmer), Yuxi Qin (modeler), Yuqiang Zhu (writer).
+This repository was created to collect the materials during our preparation period for the MCM/ICM. All the materials are custom and all the efforts are from **Xuhang Ye (captain, programmer)**, **Yuxi Qin (modeler)**, **Yuqiang Zhu (writer)**.
 
 Welcome to our repository dedicated to our preparation for the Mathematical Contest in Modeling (MCM) and the Interdisciplinary Contest in Modeling (ICM). The materials found here are custom-crafted with dedication and represent our collective effort during our preparation phase.
 
