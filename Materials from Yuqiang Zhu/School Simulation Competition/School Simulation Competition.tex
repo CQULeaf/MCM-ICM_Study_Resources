@@ -1,0 +1,982 @@
+ %美赛模板：正文部分
+
+\documentclass[12pt]{article}  % 官方要求字号不小于 12 号，此处选择 12 号字体
+% \linespread{1.1}
+% \bibliographystyle{plain}
+% 本模板不需要填写年份，以当前电脑时间自动生成
+% 请在以下的方括号中填写队伍控制号
+\usepackage[8432]{easymcm}  % 载入 EasyMCM 模板文件
+\problem{B}  % 请在此处填写题号
+% \usepackage{mathptmx}  % 这是 Times 字体，中规中矩 
+\usepackage{palatino}  % mathpazo 这palatino是 COMAP 官方杂志采用的更好看的 Palatino 字体，可替代以上的 mathptmx 宏包
+\usepackage{pdfpages}
+\usepackage{longtable}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{listings}
+\usepackage{paralist}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{textcomp} 
+\usepackage{amsmath}
+\usepackage{algpseudocode} 
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\graphicspath{{img/}}          % 此处{img/}为相对路径，注意加上“/”
+ \let\itemize\compactitem
+ \let\enditemize\endcompactitem
+
+\newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
+\title{Arresting Flames: Mathematical Modeling of Wildfire Dynamics and Evacuation on Maui Island}  % 标题
+
+% %文档开始
+\begin{document}
+%
+%% 此处填写摘要内容
+\begin{abstract}
+    
+The tropical maritime climate and unique topography have challenged Maui with droughts, hurricanes and other natural disasters, and \textbf{Maui's wildfires} are becoming more frequent. At the same time, a shortage of firefighting resources exacerbates Maui's problem of frequent wildfires. We are saddened by the large number of lives lost in the fires and the countless economic resources damaged. To better control wildfires, we model the dynamic spread of wildfires and the evacuation of people to ensure the safety of residents and visitors and to achieve the optimal balance of economy and efficiency.
+
+Several models are established to tackle Maui Island's urgent wildfire challenges: Model I: The Surface Fire Spread Model; Model II: The Wildfire Evacuation Model; Model III: The Firefighter Resource Allocation Model; Model IV: The Risk Assessment Model, etc. 
+
+For model 1, we introduce two metrics: \textbf{the fuel type influence} and \textbf{the combustion rate coefficient} to develop a differential equation model. This model predicts the spread of wildfires from an initial ignition source, incorporating factors such as wind direction and speed. Our findings suggest a significant risk of rapid fire spread without effective control measures.
+
+In model 2, divided into \textbf{evacuation planning} and \textbf{trigger buffer analysis}, we simulate evacuation procedures to optimize safety measures. By integrating traffic flow data, we provide a strategic framework to enhance evacuation efficiency and minimize potential risks.
+
+In terms of model 3, we propose \textbf{a novel algorithm} based on geographic and resource data to optimize the distribution of firefighting assets. Our model prioritizes areas with the highest risk, ensuring that resource allocation is both effective and efficient.
+
+As for model 4, utilizing environmental and meteorological data, we construct a \textbf{logistic regression} model to assess the probability of wildfire occurrences. This model allows for preemptive actions to be taken, reducing the potential impact of wildfires on the island.
+
+Our comprehensive study emphasizes the importance of early intervention and strategic planning in wildfire management to protect the ecosystem and communities of Maui Island.
+
+
+
+%    % 美赛论文中无需注明关键字。若您一定要使用，
+%    % 请将以下两行的注释号 '%' 去除，以使其生效
+    \vspace{5pt}  %mm	毫米	1 mm = 2.845 pt   pt 点	1 pt = 0.351 mm
+    \textbf{Keywords}: Wildfire Management, Simulation Model, Evacuation Planning, Resource Optimization, Risk Assessment, Maui Island
+%
+\end{abstract}
+
+\maketitle  % 生成 Summary Sheet
+
+\tableofcontents  % 生成目录
+
+
+% 正文开始
+% Chapter 1: Introduction
+\section{Introduction}
+
+\subsection{Problem Background}
+Situated in the Central Pacific Ocean, Maui ranks as the second-largest among the Hawaiian Islands, formed by the amalgamation of two shield volcanoes owing to volcanic activities. Renowned for its captivating coastal landscapes and tropical allure, Maui stands out as a favored tourist destination.
+
+Nevertheless, its tropical oceanic climate, coupled with distinctive topography, subjects Maui to challenges such as droughts, hurricanes, and other calamities, resulting in a diverse and evolving vegetation landscape. Furthermore, a shortage of firefighters exacerbates the vulnerability to wildfires on the island. In August 2023, Maui fell victim to Hawaiian wildfires, significantly jeopardizing the safety of residents, hampering the local economy, and impacting tourism. To ensure the well-being of both residents and visitors and to fortify Maui's resilience, it becomes imperative to develop wildfire evacuation models. Such models are essential for formulating effective evacuation strategies during wildfire events, thereby mitigating the potential damages caused by these wildfires.
+
+\subsection{Restatement of the Problem}
+
+\textbf{What we know:}
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+	\item Historical data and specifics of Maui wildfire events
+	\item Data on Maui's geography, climate, and vegetation distribution
+	\item Population distribution and transportation information for Maui
+\end{itemize}
+
+\textbf{What do we need to model:}
+
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex}
+	\item \textbf{The Surface Fire Spread Model}: Estimate the speed and direction of wildfire propagation under the influence of wind direction, vegetation density, and temperature.
+	\item \textbf{The Wildfire Evacuation Model}: Estimate the evacuation time for residents and tourists, considering the actual conditions in different areas.
+	\item \textbf{The Firefighter Resource Allocation Model}: Adequately estimate where firefighters will need to be deployed and rationalize the allocation of scarce firefighting resources on Maui.
+	\item \textbf{The Risk assessment model}: Assess the possibility of wildfires, considering factors such as droughts, hurricanes, and changes in vegetation.
+\end{itemize}
+
+\textbf{What strategies do we need to develop:}
+
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex}
+	\item Develop optimal \textbf{personnel evacuation strategies} that minimize evacuation time and reduce the risk of casualties.
+	\item Design optimal \textbf{firefighter deployment scenarios} that can maximize the use of scarce firefighting resources.
+	\item Establish a \textbf{wildfire early warning system} to notify personnel of evacuations promptly.
+\end{itemize}
+
+\subsection{Our Work}
+Our work comprises four distinct mathematical models, each addressing a critical aspect of wildfire management on Maui Island:
+\begin{enumerate}[\bfseries 1.]
+    \setlength{\parsep}{0ex} 
+    \setlength{\topsep}{0.5pt} 
+    \setlength{\itemsep}{0.5pt} 
+    \item Considering fuel type, terrain, and weather patterns, a differential equation model is developed. The model predicts the spread of a wildfire over time from the initial ignition point;
+    \item Using demographic data and real-time traffic conditions, an evacuation simulation model is developed. The model optimizes evacuation routes and times and aims to minimize the risk to residents and visitors during a wildfire event;
+    \item An algorithmic approach to efficiently allocate firefighting resources is presented. The model uses geographic and incident severity data to efficiently deploy resources in response to wildfires;
+    \item A logistic regression framework is developed to assess the probability of wildfire occurrence. The model takes environmental variables such as drought severity and vegetation density into account to create an early warning system.
+\end{enumerate}
+
+In order to avoid complicated description, intuitively reflect our work process, the flow chart is shown in Figure \ref{pic10}:
+
+\begin{figure}[htbp] 
+\centering 
+\includegraphics[width=.8\textwidth]{pic9.png} 
+\caption{Flow Chart of Our Work} 
+\label{pic10}
+\end{figure}
+\vspace{-0.5cm}
+
+\section{Assumptions and Explanations}
+To simplify the problem, we make the following basic assumptions, each of which has plausibility. Other assumptions may not be listed here but will be presented later in the model.
+
+Additional assumptions have been made to simplify the analysis of individual issues. These assumptions will be further analyzed at the appropriate places below.
+
+\begin{enumerate}[\bfseries \textit{Assumption} 1:]
+	\item \textbf{Only the effects of wind direction, wind speed, terrain, vegetation density, and temperature on the extent and rate of wildfire spread are considered.}\\
+	\textbf{\textit{Explanation:}} Considering Maui's environment, the spread of wildfires is primarily influenced by wind direction, vegetation density, and temperature, with minimal impact from other factors. These factors have interactions with each other, but to simplify the model, only these three factors are accounted for.
+	\item \textbf{Wildfires initiated by acts of vandalism are not taken into consideration.}\\
+	\textbf{\textit{Explanation:}} Wildfires result from various factors, and in Maui's unique climate and geography, the main contributors are objective elements of natural origin. Consequently, unpredictable and malicious fire origins can be discounted.
+	\item \textbf{The fire points are set at Olinda Rd in central Maui and Lhainaluna Rd on the west coast, with location coordinates A (20.82643, -156.29385) and B (20.88281, -156.66883).}\\
+	\textbf{\textit{Explanation:}} Since the focus of wildfire forecasting is on areas with high incidences of wildfire events, in the context of the actual distribution of wildfires on Maui, we selected the two sites mentioned above to study and analyze the spread of wildfires.
+	\item \textbf{All evacuees exhibit homogeneity in their behavior and reactions.}\\
+	\textbf{\textit{Explanation:}} In personnel evacuation, the focus is on setting up the evacuation path and assessing the evacuation point, without considering individual differences in facing fire. Therefore, our model assumes each acts independently, unaffected by others' behavior or reactions.
+	
+\end{enumerate}
+
+Additional assumptions are made to simplify analysis for individual sections. These assumptions will be discussed at the appropriate locations.
+
+\section{Notations}
+The primary notations used in this paper are listed in Table \ref{tab2}
+\begin{table}[htbp]
+	\begin{center}
+		\caption{Notations}
+		\begin{tabular}{m{1.5cm} m{12.1cm}}
+			\toprule[2pt]
+			\multicolumn{1}{m{2.7cm}}{\centering Symbol}
+			&\multicolumn{1}{m{12cm}}{\centering Description }\\
+			\midrule
+			$\tau^{\prime}$& Propagation rate of surface fire burning front \\
+		\vspace{2pt}
+		$\eta_m$& The moisture-damping coefficients \\
+		\vspace{2pt}
+		$\eta_s$& The mineral damping coefficients \\
+		\vspace{2pt}
+		$w_n$& The net fuel load \\
+		\vspace{2pt}
+		$h$& The heat content of the fuel \\
+		\vspace{2pt}
+		$R$& Propagation rate of surface fire burning front \\
+		\vspace{2pt}
+		$I_R$& Energy release intensity per unit area of fire front \\
+		\vspace{2pt}
+		$\xi$& Ratio of $I_R$ of heating adjacent fuel particles to ignition(no wind)\\
+		\vspace{2pt}
+		$\varphi_w$& The dimensionless multiplier of the effect of wind on increasing $\xi$ \\
+		\vspace{2pt}
+		$\varphi_s$ & The dimensionless multiplier of the effect of slope on increasing $\xi$\\
+		\vspace{2pt}
+		$\rho_0$ & Amount of drying fuel per cubic foot of fuel layer\\
+		\vspace{3pt}
+		$\varepsilon$ & Ratio of fuel particles heated to ignition temperature at the start of flaming combustion\\
+		\vspace{3pt}
+		$Q$ & Amount of heat required to ignite one pound of fuel\\
+		\vspace{3pt}
+		$G(V,E)$& The undirected map of the area of wildfire spread \\
+		\vspace{2pt}			
+		$b$& Number of firefighters available at each time step \\
+			
+			\bottomrule[2pt]
+		\end{tabular}
+		\label{tab2}
+		
+		\begin{tablenotes}
+			\footnotesize
+			\item[*] *There are some variables that are not listed here and will be discussed in detail in each section. %此处加入注释*信息
+		\end{tablenotes}
+	\end{center}
+\end{table}
+
+
+
+\section{Model 1: The Surface Fire Spread Model}
+\subsection{Local Assumptions}
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+	\item Assume that the proportion of live and dead herbs (two representative combustibles), moisture content, wind speed, wind direction, and terrain at locations A and B are as follows:\cite{1},\cite{2},\cite{3},\cite{4}
+	
+	(1) \textbf{At location A:}
+	\vspace{2pt}
+	
+	$\rightarrow$ The ratio of live and dead herbs is 1:4.
+	\vspace{2pt}
+	
+	$\rightarrow$ The moisture content of dead herbs, 1-h, and 10-h is $4\%$, $4\%$, and $6\%$; and the moisture content of live herbs, live woody, is $75\%$ and $90\%$. 
+	\vspace{2pt}
+	
+	$\rightarrow$ The local wind speed is $58 MPH$ and the wind direction is northeast.
+	\vspace{2pt} 
+	
+	$\rightarrow$ The terrain is east-high and west-low, and $\tan = 0.014$.
+	
+	(2) \textbf{At location B:} 
+	\vspace{2pt}
+	
+	$\rightarrow$ The ratio of live and dead herbs is 1:3.
+	\vspace{2pt}
+	
+	$\rightarrow$ The moisture content of dead herbs, 1-h, is $5\%$, $5\%$; and the moisture content of live herbs is $80\%$.
+	\vspace{2pt}
+	
+	$\rightarrow$ The local wind speed is $51 MPH$ and the wind direction is northeast.
+	\vspace{2pt} 
+	
+	$\rightarrow$ The terrain is east-high and west-low, becoming lower near the coast, and $\tan = 0.045$.
+
+	\item Assume that the flame propagates in an ellipse from a single point.
+\end{itemize}
+
+\subsection{Basic Ideas and Approaches}
+Based on the requirements of the questions, we can transform the problem into the following one: given the fuel type and characteristics, identify the specific location of the ignition point, and study the final propagation speed of the wildfire. The mechanism of the study is specified as follows:
+
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+	\item \textbf{Step 1}  Analysis of Fuel Types and Characteristics
+	
+	Based on local assumption I, fuel types and characteristics can be determined. Through fuel modeling, the influence of fuels on the wildfire propagation process can be derived. In this way, information on fuels as fundamental variables affecting fire propagation can be determined.
+	
+	\item \textbf{Step 2}  Calculate the Final Rate of Spread
+	
+	In conjunction with the results of Idea 1, depending on the specific fuel type and characteristics, a final propagation rate equation can be developed to calculate the expected rate of wildfire propagation under given conditions, and the results can be used for fire prediction and emergency response.
+	
+	\item \textbf{Step 3}  Simulate the Wildfire Propagation from a Single Ignition Point
+	
+	According to Assumption 3, two points with location coordinates A (20.82643, -156.29385) and B (20.88281, -156.66883) are selected as the research objects, and by establishing the flame propagation model of one single ignition point and combined with the final propagation rate calculated in Idea 2, the form of the spread of wildfire can be simulated. 
+\end{itemize}
+
+\subsection{Modeling and Solving}
+\subsubsection{Analysis of Fuel Types and Characteristics}
+Fuel properties have a significant impact on wildfire propagation, which is related to the problem of calculating the parameters of the wildfire propagation model. Therefore, we characterize the fuels by establishing the Dynamic Fuel Model.
+
+The Dynamic Fuel Model provides a detailed parameterize of the fuel properties involved. It identifies the different fuel types in the form of codes such as "GR2" or "GS3". In the wildfire propagation model, the fuel properties required are shown in the table below:
+
+\begin{table}[htbp]
+	\begin{center}
+		\caption{Fuel properties}
+		\begin{tabular}{m{1.5cm} m{9cm}}
+			\toprule[2pt]
+			\multicolumn{1}{m{3cm}}{\centering Symbol}
+			&\multicolumn{1}{m{9cm}}{\centering Description }\\
+			\midrule
+			$\omega$& Fuel load ( fuel weight per unit area ) \\
+			\vspace{2pt}
+			$\sigma$& The surface-to-volume ratio of fuel \\
+			\vspace{2pt}
+			$\bar{\sigma}$ & Weighted average of the surface-to-volume ratio of fuel\\
+			\vspace{2pt}
+			$\delta$& Burning bed depth\\
+			\vspace{2pt}
+			$M_x$& Residual moisture content after fuel combustion \\
+			\vspace{2pt}
+			$\beta$& The ratio of sphere density to particle density \\
+			\vspace{2pt}
+			$\beta r$& Relative fill ratio \\
+
+	 		\bottomrule[2pt]
+			\end{tabular}
+		\label{properties} 
+	\end{center}
+\end{table}
+
+
+Previous work has given us some insights and 53 fuel models have been developed so far.\cite{4} Due to the length of the article, we will not list them all here; we will select the appropriate fuel models to introduce into the calculations and analyze them in detail later.
+
+\subsubsection{Calculate the Final Rate of Spread}
+
+First, we calculate the ratio of reaction zone efficiency to reaction time, using the following equation:
+\begin{equation}
+	\tau=\tau^{\prime}{ }\cdot \eta_m\cdot \eta_s
+\end{equation}
+Where Reaction zone efficiency refers to the integrity of fuel consumption in the combustion zone. $\tau^{\prime}$ represents The reciprocal of the optimal reaction rate, which can be interpreted as the reciprocal of the time taken for complete combustion of a fuel that contains no moisture and contains minerals and $\aleph$-vitamins. $\eta_m$, $\eta_s$ represents the moisture damping coefficients, and mineral damping coefficients, which are related to the fuel's own moisture content and mineral content, and which have a decreasing effect on the reaction rate.
+
+Second, solve for the intensity of the reaction, referred to by $I_R$, which means the amount of heat released by the material in all directions during combustion, using the following equation:
+\begin{equation}
+	\mathrm{I_R}=\tau\cdot \mathrm{w_n}\cdot \mathrm{h}
+\end{equation}
+Where $w_n$ represents the net fuel load, which is the weight of the fuel minus the internal moisture content of the fuel and the mineral content of the fuel. $h$ represents the heat content of the fuel, which is usually 8,000 $Btu/lb$. $wn\cdot h$ represents the amount of heat that can be gained by burning all of the fuel.
+
+Next, the parameter $\xi$ , which represents the fraction of heat that can ignite the fuel as a proportion of the heat released, is introduced.$I_R\cdot \xi$ represents the amount of heat released per unit time per unit area that can ignite the fuel. Combining the results of the reaction intensity equation, the following equation is introduced:
+\begin{equation}
+	\text { Heat source }= IR \cdot \xi\cdot(1+\varphi_w+\varphi_s)
+\end{equation}
+Where $\varphi_w$ and $\varphi_s$ refer to the effect of wind and terrain factors on the heat released from combustion. With this equation, we take wind and terrain factors into account.
+
+\subsubsection{Simulate the Wildfire Propagation from a Single Ignition Point}
+The Single Ignition Point Wildfire Propagation Model is one model used to simulate and analyze the process of wildfire propagation in the natural environment with the assumption that a wildfire is started by a single ignition point. In this problem, factors such as wind direction, vegetation density, and temperature are taken into account to predict the development and spread of a wildfire. The objective of the model is to resolve the form of flame propagation to aid in the development of personnel evacuation strategies and firefighter deployment strategies in the later section.
+
+First, based on Local Assumption II, which assumes that wildfires propagate according to an elliptical pattern, and combined with the results of the IR calculations in Step 2, the following formulas are brought into the calculation:
+\begin{equation}
+	\begin{aligned}
+		& D_s=R_0\cdot  \varphi_s\cdot t \\
+		& D_w=R_0\cdot  \varphi_w\cdot t
+	\end{aligned}
+\end{equation}
+Where $R_0 = I_R\cdot \xi / \rho_0\cdot \varepsilon \cdot Q$, represents the wind speed when no wind and no slope. $D_s$, $D_w$ are vectors, whose magnitude is given in the calculation formula, and whose direction respectively depends on the direction of the terrain slope and the wind direction.
+
+Next, the other parameters required for the model are calculated with the formula given below:
+\begin{equation}
+	\begin{cases}
+	\begin{aligned}
+		& \phi_w=C U^B\left(\beta / \beta_{o p}\right)^{-E} \\
+		& C=7.47 \exp \left(-0.133 \sigma^{0.55}\right) \\
+		& B=0.02526 \sigma^{0.54} \\
+		& E=0.715 \exp \left(-3.59 \times 10^{-4} \sigma\right) \\
+		& \phi_s=5.275 \beta^{-0.3}(\tan \phi)^2
+	\end{aligned}
+	\end{cases}
+\end{equation}
+Where U represents the wind velocity at mid-flame height. In this model, the maximum value of U is $0.9I_R$. $C$, $B$ and $E$ are wind factors. The tangent value indicates the vertical height of the local terrain slope divided by the horizontal height.
+
+Then, Dh is solved with the vector addition formula, which is presented below:
+\begin{equation}
+	\begin{aligned}
+		& \vec{D_h} = \vec{D_s} + \vec{D_w} \\
+		& D_h=\sqrt{\left(D_s^2+D_w^2 \right)}
+	\end{aligned}
+\end{equation}
+Where the direction of $D_h$ is the direction of final flame propagation, and the sum of $D_{h1}$ and $R_0\cdot t$ represents the distance of flame propagation along the direction of $D_{h1}$ in time $t$, which is set to $D_{h2}$.
+
+The following equation is next utilized to solve for the effective mid-flame wind speed for wildfire propagation, where $\varphi_e = \varphi_w + \varphi_s$:
+\begin{equation}
+	u_e=\left[\varphi_e \left(\beta / \beta_{o p}\right)^E / C\right]^{-B}
+\end{equation}
+
+In combination with all the above formulas and solution results, the specific shape parameters of the ellipsoid-shaped model of wildfire propagation are finally obtained. By setting $L$ to represent the long axis of the flame propagation ellipse and $W$ to represent the short axis of the flame propagation ellipse, the following equations can be derived:
+\begin{equation}
+	\begin{aligned}
+		& Z=L / W=1+.25u_e \\
+		& e=\sqrt{\left(Z^2-1\right)} / Z
+	\end{aligned}
+\end{equation}
+
+From this, we obtain a formula for the centrifugal rate when the flame propagates along an ellipse.
+
+So far, we have completed the construction of the wildfire propagation model to extrapolate the rate and extent of fire propagation under different conditions. It should be noted that the model is based on an exhaustive review of the relevant literature and considers a scenario in which the flame spreads in an elliptical shape under single-point ignition conditions. Given the regularity of wildfire propagation, the analytical results of this model will reveal the propagation pattern with the most probability of occurrence.
+
+\subsection{Simulation of wildfire propagation processes}
+Based on the reviewed information, we made the Local Assumption I, which qualifies the significant parameters of the model such as the proportion of live and dead herbs, moisture content, wind speed, wind direction, and terrain at locations A and B, to simplify the analysis and calculation process.
+
+Bringing the parameter values into the relevant equations, we can calculate the results as shown below:
+\begin{figure}[H]  %h此处，t页顶，b页底，p独立一页，浮动体出现的位置
+	\centering  %图表居中
+	\includegraphics[width=0.8\textwidth]{pic7.png} %图片的名称或者路径之中有空格会出问题 
+	\caption{calculate results} % 图片标题 
+\end{figure}
+
+
+Since an ellipse can be approximated as a circle when the centrifugal rate is approximately equal to zero, we conclude that the pattern of final flame propagation is a circle centered on the point of ignition, with propagation speeds of $236.918 ft/min$ at location A and $4135.25 ft/min$ at location B.
+
+\section{Model 2: The Wildfire Evacuation Model}
+
+\subsection{Local Assumptions}
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+	\item Assume that all households will start evacuating as soon as they receive an evacuation warning. Their departure times conform to a normal distribution \( N(\mu, \sigma) \), where \( \mu \) denotes the mean departure time and \( \sigma \) denotes the standard deviation.
+	
+	\item Assume that all evacuees will choose the nearest destination and tend to choose the shortest evacuation path, especially in Wild Urban Interface (WUI) areas where the road network is sparse.
+\end{itemize}
+
+\subsection{Modeling and Solving}
+\subsubsection{Estimate Evacuation Time Using Traffic Simulation}
+
+\subsubsection*{Workflow of Evacuation Simulation}
+The work of predecessors has given us some inspiration. Based on the five-step evacuation simulation procedure proposed by Southworth, the steps of the model are shown in the Figure \ref{pic1}:
+\begin{figure}[htbp] 
+	\centering  
+	\includegraphics[width=0.8\textwidth]{pic1.png} 
+	\caption{The workflow of traffic simulation}  
+	\label{pic1}
+\end{figure}
+
+According to the above figure, it can be seen that the process is based on household data. First, based on the trip generation module, the number of evacuations for each family is determined. Second, based on the mobilization module, the evacuation process is initiated. In the destination selection module, each evacuating family will decide its evacuation point. Then, the evacuation route selection module assigns a specific path for each evacuation. In the Evacuation Traffic Assignment Model, traffic flows are assigned to different evacuation routes. Finally, this workflow estimates the evacuation time for the whole community, which provides quantitative decision support for the evacuation strategy.
+
+\subsubsection*{Estimation of Evacuation Time}
+In the analysis, total evacuation time is defined as the period from when the evacuation warning is issued until the last vehicle reaches the destination exit.
+
+Statistical methods are used to calculate the time taken when different percentages of the population have completed the evacuation, such as $25\%$, $50\%$, $75\%$, and $95\%$. These data points are then used as inputs to the trigger model to optimize the evacuation process.
+
+\subsubsection*{Analysis of Simulation Results}
+It can be concluded from the model results that the evacuation time statistics show that $95\%$ evacuation completion is more acceptable than $100\%$ completion as it is more realistic and easier to operationalize.
+
+The different percentage nodes of evacuation time ($T25$, $T50$, $T75$, $T95$) provide a multidimensional way of estimating evacuation time, which can be used for more detailed evacuation planning and risk assessment.
+
+\subsubsection{Generate Probability-Based Trigger Buffers}
+In Step 2, the evacuation time estimates (ETEs) obtained from Step 1 are aggregated to derive cumulative probabilities, which in turn generate probability-based trigger buffers. As shown in Figure \ref{pic3}, these trigger buffers are constructed by calculating the time points ($T25$, $T50$, $T75$, $T95$) at which different percentages of evacuation are completed to ensure that evacuation can be completed in a given evacuation scenario.
+\begin{figure}[htbp]  
+	\centering  
+	\includegraphics[width=0.8\textwidth]{pic3.png} 
+	\caption{An illustration of the derived four ETEs} 
+	\label{pic3}
+\end{figure}
+\vspace{-0.5cm}
+
+\subsubsection*{Cumulative Probability of Trigger Buffers}
+First, for each evacuation time \(ETE_i \) obtained from the traffic simulation, the cumulative probability of different evacuation completion times \(F_k \) is calculated. Let \(n \) be the number of times the traffic simulation is run, and \(ETE_i \) be the estimated evacuation time for the first \(i\) simulation. Let \(m \) be the number of unique evacuation time estimates and have \(m \leq n \). We sort the unique \( ETEs \) to get \( ETE_1, ETE_2,\dots , ETE_m \), then the cumulative frequency \(F_k \) corresponding to each \(ETE_k \) can be expressed by the following equation:
+
+\begin{equation}
+	\begin{aligned}
+		F_k = \left( \frac{C_k}{n} \right) \times 100\% 
+	\end{aligned}
+\end{equation}
+Where \( C_k \) represents the number of times the evacuation time is less than or equal to \( ETE_k \), \(F_k \) represents the cumulative frequency.
+
+Next, generate trigger buffers for each \(ETE \) based on the cumulative probability \(F_k \). Associate each buffer \(b_k \) with a probability value \(P_k \). The probability value \(P_k \) indicates the likelihood of successful evacuation that can be ensured by using that trigger buffer. The formula is:
+\begin{equation}
+	\begin{aligned}
+		P_k = F_k 
+	\end{aligned}
+\end{equation}
+ 
+Based on the above process, the calculation results as shown in Figure \ref{pic4}. The calculation of the cumulative probability is presented in  Table (a), which shows the cumulative probability of triggering a buffer for different \( ETE_s \). The generation of buffers is presented by Table (b). Each trigger buffer is associated with a cumulative probability value, which indicates the probability of completing a particular evacuation within that buffer.
+\begin{figure}[htbp]  
+	\centering  
+	\includegraphics[width=0.8\textwidth]{pic4.png} 
+	\caption{The workflow of traffic simulation} 
+	\label{pic4}
+\end{figure}
+\vspace{-0.5cm}
+
+\subsubsection*{Trigger Buffers Creation Steps}
+The creation of the trigger buffers combines techniques and algorithms related to Geographic Information Systems (GIS) and The Surface Fire Spread Model we constructed in the previous section. Its purpose is to determine the optimal point in time when the community needs to start evacuating in a fire spread scenario. It minimizes the risk of injury or death to the affected population and ensures the safety of the residents. The process starts with evacuation time estimates (ETEs) and forms a series of buffers by calculating their cumulative probabilities, each associated with a certain probability of successful evacuation.
+
+The following are the steps involved in trigger buffers:
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+	\item \textbf{Model the spread of fire:} The selected GIS software (QGIS) and fire simulation software (BehavePlus 6) are used to model the fire spread process in a given area and to calculate the rate of flame spread in different directions.
+	
+	\item \textbf{Construct a fire travel time network:} Based on the results of model calculations to construct a fire travel time network. The network takes into account the effects of factors such as terrain, vegetation fuel modeling, and wind speed on the rate of flame spread.
+	
+	\item \textbf{Reverse edges and traverse:} The direction of the edges in the fire travel time network is reversed, and the Dijkstra shortest path algorithm is applied to traverse outward from the center of the community. This process continues until the accumulated fire travel time reaches the preset evacuation time point. The code for the Dijkstra shortest path algorithm is as follows:
+
+\noindent\hspace{-2.5em} % Adjust the value as needed
+\begin{algorithm}[H]
+	\DontPrintSemicolon % Disable semicolons at the end of lines
+	\caption{Dijkstra's Shortest Path Algorithm}
+	\KwIn{Graph $G(V, E)$, start node $start$}
+	\KwOut{Shortest path from $start$ to all other nodes in $G$}
+	\BlankLine
+	\SetAlgoLined % Enable line mode to display vertical lines
+	Initialize $distances[v] \gets \infty$ for all $v \in V$ except $start$ where $distances[start] \gets 0$\;
+	Initialize $visited \gets$ empty set\;
+	Initialize $queue \gets$ priority queue with all nodes in $V$ based on $distances$\;
+	\While{not $queue$.isEmpty()}{
+		$current \gets queue$.extractMin()\;
+		add $current$ to $visited$\;
+		\For{each $neighbor \in$ adjacent($current$)}{
+			\If{$neighbor \not\in visited$}{
+				$alt \gets distances[current] + length(current, neighbor)$\;
+				\If{$alt < distances[neighbor]$}{
+					$distances[neighbor] \gets alt$\;
+					$queue$.decreaseKey($neighbor, alt$)\;
+				}\tcc*[r]{end if alt}
+			}\tcc*[r]{end if neighbor not visited}
+		}\tcc*[r]{end for neighbor}
+	}\tcc*[r]{end while}
+	\Return{$distances$}
+\end{algorithm}
+	
+	
+\end{itemize}
+
+These steps allowed us to create a series of ring-triggered buffers centered on communities. The extent of each of these buffers depends on the time it takes for a wildfire to reach the area. These buffers provide a scientific basis for developing risk-based evacuation strategies, allowing decision makers to optimize evacuation plans based on the probability values of different trigger buffers, thus maximizing the safety of community residents.
+
+\subsubsection{Evaluate the Value of the Generated Trigger Buffers}
+\subsubsection*{The Value Assessment Process}
+ \begin{itemize}
+ 	\setlength{\parsep}{0ex} 
+ 	\setlength{\topsep}{2ex} 
+ 	\setlength{\itemsep}{1ex} 
+ 	\item \textbf{Couple The Surface Fire Spread Model with the traffic simulation model:}  The probability-based trigger buffer obtained in step 1 is used as input to the wildfire simulation to compute the point in time at which the flame boundaries will be calculated to determine when to notify the community to evacuate.
+ 	
+ 	\item \textbf{Issue Evacuation Warning:} When the flames reach the trigger buffer (at time \( t_0 \)), residents will be notified to evacuate. At this time, vehicles begin to leave their homes and travel toward the exit node.
+ 	
+ 	\item \textbf{Evaluate the effectiveness of the trigger buffers:}  At the time the flames reach the community \( t_2 \), evaluate the effectiveness of the trigger buffer used during the evacuation. This involves calculating the shortest distance between the flame front and vehicles in transit, as well as assessing the extent to which evacuees are exposed to fire risk during the evacuation process.
+ \end{itemize}
+ 
+ Figure \ref{pic6} is the conceptual diagram of the process of evaluating the value of the trigger buffer.
+ \begin{figure}[htbp]  
+ 	\centering  
+ 	\includegraphics[width=0.8\textwidth]{pic6.png} 
+ 	\caption{The conceptual diagram of the evaluation procedure} % 图片标题 
+ 	\label{pic6}
+ \end{figure}
+ \vspace{-0.5cm}
+
+ For some of the information in the figure, we make the following statements:
+ 
+ $\rightarrow$The flames started at the ignition source and spread toward the neighborhood.
+ 
+ $\rightarrow$When the flames reach the trigger buffer (\( t_0 \)), the residents are notified to start the evacuation.
+ 
+ $\rightarrow$At the time the flames reach the community \( t_2 \), the effectiveness of the trigger buffer used during the evacuation will be evaluated.
+ 
+ \subsubsection*{Calculation and Processing of Data}
+ Concerning the data calculation and processing of the variables covered in Figure \ref{pic6}, the following explanations are provided:
+  \begin{itemize}
+ 	\setlength{\parsep}{0ex} 
+ 	\setlength{\topsep}{2ex} 
+ 	\setlength{\itemsep}{1ex} 
+ 	\item \textbf{Calculation of Personnel Threat Distance:}  
+ 	
+ 	To assess the effectiveness of the trigger buffer, it is first necessary to calculate the shortest distance between the individual (in this case the vehicle) and the flame front. For this calculation, the Euclidean distance is used, which is calculated as a straight line distance from point to point in a two-dimensional space.
+ 	
+ 	The shortest distance \(D \) between the vehicle \(v \) at position \(p \) and the flame front at time \(t \) at position \(f(t) \) is calculated as:
+ 	\begin{equation}
+ 		\begin{aligned}
+ 			D(v, t) = \min_{f \in F(t)} \| p - f \| 
+ 		\end{aligned}
+ 	\end{equation}
+ 	Where \(F(t) \) denotes the set of all possible points on the flame front at time \(t \), and \(\| p - f \| \) denotes the Euclidean distance from point \(p \) to point \(f \).
+ 	
+ 	\item \textbf{Construction of Time-Position Set \( TP(v) \):} 
+ 	
+ 	For each vehicle \(v\), a set \(TP(v)\) is constructed including the point in time \(t\) and the position of the vehicle at time \(t\) \(p\).
+ 	
+ 	Each \(p\) is to be calculated as the shortest Euclidean distance from the flame front, as described earlier.
+ 	
+ 	
+ 	\item \textbf{Data Analysis:}  
+ 	
+ 	The distance between each vehicle's position and flame front at different points in time is to be analyzed to assess fire risk during evacuation.
+ 	
+ 	Aggregating and mapping vehicle location data is to be used to visualize and understand the spatial relationship of vehicles to the flame front during evacuation.
+ 	
+ \end{itemize}
+ 
+ Through the above steps, it can be reasonably assessed whether the triggered buffer zone strategy is effective and the fire risk faced by evacuees during evacuation for a given evacuation plan and fire scenario. These calculations contribute to the optimization of the evacuation strategy and can guide evacuation decisions during a real fire event.
+ 
+ \section{Model 3: The Firefighter Resource Allocation Model}
+ \subsection{Local Assumptions:}
+ \begin{itemize}
+ 	\setlength{\parsep}{0ex} 
+ 	\setlength{\topsep}{2ex} 
+ 	\setlength{\itemsep}{1ex} 
+ 	\item \textbf{Simplification of the graph structure:} 
+ 	
+ 	It is assumed that the area over the spread of the wildfire can be represented as a simple undirected graph, where each node represents a region and each edge represents a possible path for the fire to spread.
+ 	
+ 	\item \textbf{Consistency of fire spread:} 
+ 	
+ 	It is assumed that in the absence of intervention, the fire spreads according to a previously predicted pattern. And in each time step, the fire spreads uniformly along the edge from one burning node to all unprotected neighboring nodes.
+
+	\item \textbf{Constant and optimal allocation strategy for firefighter resources:} 
+	
+	 Given the limited firefighting resources on Maui, the number of firefighters available at each time step is fixed, which is represented by b. Our strategy needs to optimize resource allocation to ensure that critical areas are prioritized for protection.
+ 
+ 	\item \textbf{Continuity of time steps:} 
+ 	
+     Firefighter deployment and fire spread occur at fixed intervals without interruption.
+\end{itemize}
+
+\subsection{Local Notations:}
+Some important mathematical notations used in this model are listed in Table 3. 
+\begin{table}[h]
+	\begin{center}
+		\caption{Notations in Model III}
+		\begin{tabular}{m{2cm} m{12cm}}
+			\toprule[2pt]
+			\multicolumn{1}{m{3cm}}{\centering Symbol}
+			&\multicolumn{1}{m{12cm}}{\centering Description }\\
+			\midrule
+			$V$& Node set \\
+			\vspace{2pt}
+			$E$& Edge set \\
+			\vspace{2pt}
+			$G(V,E)$& The undirected map of the area of wildfire spread \\
+			\vspace{2pt}
+			$b$& Number of firefighters available at each time step \\
+			\vspace{2pt}
+			$t$& The time step represented by a natural number \\
+			\vspace{2pt}
+			$S_t$& The set of nodes deployed by the firefighter at time step $t$ \\
+			\vspace{2pt}
+			$F_t$& The set of nodes burning at the time step $t$ \\
+			\vspace{2pt}
+			$P_t$& The set of nodes not covered by flame at the end of time step $t$ \\
+			\vspace{2pt}
+			$D(G)$& Maximum degree of Graph G \\
+			\vspace{2pt}
+			$PW(G)$& Path width of Graph G\\
+			\vspace{2pt}
+			$N(G)$& Total number of nodes in Graph G \\
+			
+			\bottomrule[2pt]
+		\end{tabular}
+	\end{center}
+\end{table}
+\vspace{-0.4cm}%在\end{table}下加一行\vspace{-1cm} 其中-1的作用是缩短与下方文字距离的 切记！必须是负数
+
+\subsection{Modeling and Solving}
+\subsubsection{Graph Initialization and Problem Definition}
+\subsubsection*{Representation and Initialization of Undirected Graphs}
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+	\item \textbf{Construction of the undirected graph:} 
+	
+	Two undirected graphs, $G_A(V, E)$ and $G_B(V, E)$, are defined to model the geographic and community distribution information in the vicinity of the two selected fire sites on Maui. \cite{8} Where each node $v \in V$ represents a specific geographic region (e.g., community, grassland, etc.), and each edge $e \in E$ represents a possible path of fire spread between the two regions.
+	
+	\item \textbf{Regional characteristics:} 
+	
+	Apply our previous calculations of fire spread rate ($236.918f t/min$ at location A and $4135.25f t/min$ at location B) and direction (northeast to southwest in both locations) for the different areas.
+	
+	\item \textbf{Localization of fire sources:} 
+	
+	The starting nodes of the fire are Olinda Rd in central Maui and Lhainaluna 
+	Rd on the west coast, with location coordinates A (20.82643, -156.29385) and B (20.88281, -156.66883).
+	
+	\item \textbf{Availability of resources:} 
+	
+	Given Maui's resource constraints and availability, we define the number of firefighters available at each time step to be b.
+\end{itemize}
+
+\subsubsection*{Problem Definition and Overview}
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+	\item \textbf{Goal Setting:} 
+	
+	 $b$ nodes are selected at each time step to deploy firefighters, to maximize the number of nodes that are ultimately not covered by flames, thereby protecting critical areas and ecosystems.
+	
+	\item \textbf{Temporal Dynamics:} 
+	
+	 Define a time step $t$. In each $t$, the fire spreads uniformly from the burning node along the edge to all unprotected neighboring nodes. The deployment of firefighters instantly prevents the fire from spreading to the protected nodes.
+	
+	\item \textbf{Graph Complexity Analysis:} 
+	
+	 Evaluate the path width $PW(G)$ and maximum degree $D(G)$ of Graph G, to understand the computational complexity of the problem. Due to the diversity of Maui's topography and vegetation distribution, it is expected that the graph structure may be more complex, affecting the design of the problem solution.
+	
+	\item \textbf{Availability of resources:} 
+	
+	Given Maui's resource constraints and availability, we define the number of firefighters available at each time step to be b.
+\end{itemize}
+
+\subsubsection{Design of Decision-making Algorithms}
+In this model, the associated algorithms are designed to efficiently manage firefighting resources to minimize fire damage to two selected areas of Maui. The algorithms need to consider the rate and direction of fire spread in each area while making optimal firefighter deployment decisions at each time step $t$.
+
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+	\item \textbf{Preprocessing:} 
+	
+	From the two graphs $G_A(V, E)$ and $G_B(V, E)$, Calculate the expected spread time for each node based on the rate and direction of fire spread and mark the starting fire nodes (Olinda Rd and Lhainaluna Rd).
+	
+	\item \textbf{Firefighter deployment strategy:} 
+	
+	Using the greedy algorithm as a basis, firefighters are prioritized to be deployed at nodes that are spreading fast and pose a high threat to communities and ecosystems. At the same time, resource constraints (number of firefighters b) at each time step are considered to select which nodes to deploy at to maximize protection.
+	
+	The code for the greedy algorithm is shown below:
+	
+	\noindent\hspace{-2em}
+	\begin{algorithm}[H]
+		\DontPrintSemicolon % Disable semicolons at the end of lines
+		\caption{Greedy Approach for Deploying Firefighters}
+		\KwIn{Graph $G(V, E)$, Number of firefighters $b$, Fire spread rate $F_{\text{rate}}$, Time steps $T$}
+		\KwOut{Updated graph $G$ with deployed firefighters}
+		\BlankLine
+		\SetAlgoLined % Enable line mode to display vertical lines
+		Initialize priority queue $Q$ based on $F_{\text{rate}}$\;
+		\For{$t = 1$ \textbf{to} $T$}{
+			\For{$i = 1$ \textbf{to} $b$}{
+				$v \gets$ node with highest priority from $Q$\;
+				Deploy firefighter to node $v$\;
+				Update $Q$ with new fire spread rate\;
+			}\tcc*[r]{end for i}
+			Update graph $G$ with firefighter deployment\;
+		}\tcc*[r]{end for t}
+		\Return{$G$}
+	\end{algorithm}
+	
+	\item \textbf{Dynamic planning and path analysis:} 
+	
+	Dynamic planning is applied to predict the fire's path of spread over the next several time steps to plan firefighter deployment in advance. Considering the complexity of graphs $G_A$ and $G_B$, path width $PW(G)$ and maximum degree $D(G)$ are used to guide the optimization of firefighter deployment strategies.
+	
+	The code for dynamic programming is shown below:
+	
+	\noindent\hspace{-2em}
+	\begin{algorithm}[H]
+		\DontPrintSemicolon % Disable semicolons at the end of lines
+		\caption{Dynamic Programming for Predicting Fire Spread}
+		\KwIn{Graph $G(V, E)$, Fire spread predictions $P$, Time steps $T$}
+		\KwOut{Prediction table $P$ for fire spread}
+		\BlankLine
+		\SetAlgoLined % Enable line mode to display vertical lines
+		Initialize prediction table $P$\;
+		\For{$t = 1$ \textbf{to} $T$}{
+			\ForAll{nodes $v \in V$}{
+				Calculate predicted fire spread for node $v$\;
+				Update $P[t][v]$ with prediction\;
+			}\tcc*[r]{end for all nodes}
+		}\tcc*[r]{end for t}
+		\Return{$P$}
+	\end{algorithm}
+	
+	\item \textbf{Iterative updating and feedback mechanisms:} 
+	
+	After each time step $t$, the graph state is updated to mark nodes that have been covered by fire and nodes that have been protected.	Then iteratively update the firefighter deployment policy based on the latest graph state.
+	
+	The code for the iterative update is shown below:
+	
+	\noindent\hspace{-2em}
+	\begin{algorithm}[H]
+		\DontPrintSemicolon % Disable semicolons at the end of lines
+		\caption{Iterative Update for Firefighter Deployment}
+		\KwIn{Graph $G(V, E)$, Time steps $T$, Number of firefighters $b$}
+		\KwOut{Updated graph $G$ after $T$ steps}
+		\BlankLine
+		\SetAlgoLined % Enable line mode to display vertical lines
+		\For{$t = 1$ \textbf{to} $T$}{
+			$G \gets$ deploy\_firefighters($G$, $b$)\;
+			$G \gets$ update\_graph\_state($G$)\;
+			Update firefighter strategy based on new graph state\;
+		}\tcc*[r]{end for t}
+		\Return{$G$}
+	\end{algorithm}
+	
+\end{itemize}
+  
+ The specific algorithm design steps in Step 2 ensure that the model not only has a theoretically based computational complexity analysis, but also has the adaptability and flexibility for practical application scenarios.
+ 
+ \section{Model 4: The Risk Assessment Model}
+  
+  \subsection{Modeling and Solving}
+  First, the factors that influence wildfire occurrence are selected as input features. In this model, $x_1$, $x_2$ and $x_3$ represent the effects of drought, hurricane winds, and vegetation changes. Where $x_1$ is the Comprehensive Drought Severity Index (CDSI), which is a combination of multiple drought classes that provide a single, quantitative measure of drought severity through a weighting operation, calculated as follows:
+  \begin{equation}
+  	\begin{aligned}
+  		CSDI = D_4 \cdot 5 + (D_3-D_4)\cdot 4 + (D_2-D_3)\cdot 3 + (D_1-D_2)\cdot 2 + (D_0-D_1)\cdot 1
+  	\end{aligned}
+  \end{equation}
+  The meanings of $D_0$, $D_1$, $D_2$, $D_3$, $D_4$ are as follows:
+  
+  \begin{table}[htbp]
+  	\begin{center}
+  		\caption{Meanings and weights of the index}
+  		\begin{tabular}{m{1.5cm} m{7cm}m{1cm}}
+  			\toprule[2pt]
+  			\multicolumn{1}{m{2cm}}{\centering Index}
+  			&\multicolumn{1}{m{7cm}}{\centering Meaning }
+  			&\multicolumn{1}{m{2cm}}{\centering Weights }\\
+  			\midrule
+  			$D_4$& Exceptional Drought (0-2 percentile) & 5 \\
+  			\vspace{2pt}
+  			$D_3$& Extreme Drought (2-5 percentile) & 4\\
+  			\vspace{2pt}
+  			$D_2$& Severe Drought (5-10 percentile) & 3\\
+  			\vspace{2pt}
+  			$D_1$& Moderate Drought (10-20 percentile) & 2\\
+  			\vspace{2pt}
+  			$D_0$& Abnormally Drought (20-30 percentile) & 1\\
+  			
+  			
+  			\bottomrule[2pt]
+  		\end{tabular}
+  	\end{center}
+  \end{table}
+  \vspace{-0.5cm}
+  $x_2$ is the local wind speed at the time of the fire, and $x_3$ is the fuel moisture content at the site of the fire, which is a weighted average of the moisture content of live and dead fuels.
+  
+  After selecting the features, we construct the linear function:
+ 
+ \begin{equation}
+ 	\begin{aligned}
+ 		y = w_0 + W_1 \cdot x_1 + W_2 \cdot x_2 + W_3 \cdot x_3 
+ 	\end{aligned}
+ \end{equation}
+ 
+ Where $w_0$, $w_1$, $w_2$, $w_3$ are parameter values and $x_1$, $x_2$, $x_3$ are eigenvalues. Since $y$ may be huge or negative, a nonlinear function is introduced to map the $y$ value to a value in the $range(0,1)$. The Sigmoid Function is shown below:
+ 
+ \begin{figure}[htbp]  
+ 	\centering  
+ 	\includegraphics[width=0.8\textwidth]{pic9.jpg} %图片的名称或者路径之中有空格会出问题 
+ 	\caption{Sigmoid function image} 
+ 	\label{pic9}
+ \end{figure}
+ \vspace{-0.5cm}
+ 
+ Then, establish the relationship between the probability value $P$ and $y$:
+ \begin{equation}
+ 	\begin{aligned}
+ 		& \ln{\frac{P}{1-P}} = y \\
+ 		& P=\frac{e^y}{1+e^y}
+ 	\end{aligned}
+ \end{equation}
+ 
+ Finally, the probability of each category is calculated using the computational diagram shown below:
+ \begin{figure}[htbp]  
+ 	\centering  
+ 	\includegraphics[width=0.7\textwidth]{pic8.png} 
+ 	\caption{The probability of each category} 
+ 	\label{pic8}
+ \end{figure}
+ \vspace{-0.5cm}
+ 
+ \subsection{Model Training}
+ With a large number of samples,the logistics model is trained to solve for the values of $w_0$, $w_1$, $w_2$, and $w_3$.
+ 
+ Fourteen points are selected, six of which are places where fires have occurred and eight of which are places where no fires have occurred. The data found are shown in the table below:
+ 
+   \begin{table}[htbp]
+ 	\begin{center}
+ 		\caption{Sample data in the presence of fire}
+ 		\begin{tabular}{m{1.7cm} m{1.5cm}m{1.5cm}m{1.5cm}}
+ 			\toprule[2pt]
+ 			\multicolumn{1}{m{2cm}}{\centering Time}
+ 			&\multicolumn{1}{m{2cm}}{\centering CDSI }
+ 			&\multicolumn{1}{m{2cm}}{\centering Velocity }
+ 			&\multicolumn{1}{m{2cm}}{\centering Moisture content }\\
+ 			\midrule
+ 			2023.8.9& 1.3489 & 27.7 & 0.1337 \\
+ 			\vspace{2pt}
+ 			2018.8.22& 1.0262 & 18.4 & 0.1225 \\
+ 			\vspace{2pt}
+ 			2011.7.6& 1.2531 & 17.6 & 0.1185 \\
+ 			\vspace{2pt}
+ 			2007.7.5& 1.5573 & 16.5 & 0.1202 \\
+ 			\vspace{2pt}
+ 			2005.5.18& 0.5420 & 11.6 & 0.1442 \\
+ 			\vspace{2pt}
+ 			2000.3.6& 1.9216 & 16.7 & 0.1503 \\
+ 			
+ 			\bottomrule[2pt]
+ 		\end{tabular}
+ 	\end{center}
+ \end{table}
+ \vspace{-0.5cm}
+    \begin{table}[H]
+ 	\begin{center}
+ 		\caption{Sample data in the absence of fire}
+ 		\begin{tabular}{m{1.5cm} m{1.5cm}m{1.5cm}m{1.5cm}}
+ 			\toprule[2pt]
+ 			\multicolumn{1}{m{2cm}}{\centering Time}
+ 			&\multicolumn{1}{m{2cm}}{\centering CDSI }
+ 			&\multicolumn{1}{m{2cm}}{\centering Velocity }
+ 			&\multicolumn{1}{m{2cm}}{\centering Moisture content }\\
+ 			\midrule
+ 			2022.8.3& 2.4984 & 14.5 & 0.1407 \\
+ 			\vspace{2pt}
+ 			2021.5.7& 0.8989 & 16.0 & 0.1428 \\
+ 			\vspace{2pt}
+ 			2019.8.16& 1.4602 & 13.4 & 0.1358 \\
+ 			\vspace{2pt}
+ 			2017.7.13& 1.0253 & 12.2 & 0.1274 \\
+ 			\vspace{2pt}
+ 			2015.3.1& 1.1484 & 12.9 & 0.1525 \\
+ 			\vspace{2pt}
+ 			2010.12.9& 2.0525 & 7.0 & 0.1643 \\
+ 			\vspace{2pt}
+ 			2008.8.25& 1.6121 & 13.4 & 0.1252 \\
+ 			\vspace{2pt}
+ 			2002.7.4& 0.1208 & 6.9 & 0.1155 \\
+ 			
+ 			\bottomrule[2pt]
+ 		\end{tabular}
+ 	\end{center}
+ \end{table}
+ \vspace{-0.5cm}%在\end{table}下加一行\vspace{-1cm} 其中-1的作用是缩短与下方文字距离的 切记！必须是负数
+ 
+ \subsection{Model Prediction}
+ Upon completion of model training, the probability of a fire occurring at a site on Maui can be obtained when the Comprehensive Drought Severity Index (CDSI), wind speed, and moisture content of live and dead fuels are known for that site. When the model results return a value of 1, the probability of a fire is high; when the results return a value of 0, the probability of a fire is low. 
+ 
+ \section{Sensitivity Analysis}
+ A sensitivity analysis is performed for the first model and the total sensitivity of each parameter in the model is obtained as follows:
+ \begin{figure}[H] 
+ 	\centering 
+ 	\includegraphics[width=0.8\textwidth]{pic10.png} 
+ 	\caption{The workflow of traffic simulation} 
+ 	\label{pic11}
+ \end{figure}
+ Where $x_1$ represents the flame intensity, $x_2$ represents the propagation flux ratio, $x_3$ represents the wind influence factor, $x_4$ represents the bulk density, and $x_5$ represents the product of effective heating number and heat of preignition $\varepsilon \cdot Q$ 
+ 
+ As can be seen from Figure \ref{pic11}, in the Surface Fire Spread Model, the change of the final flame propagation speed is very little affected by the propagation flux ratio, the sensitivity of the flame intensity and the sensitivity of the wind factor are almost the same, and the sensitivity of the bulk density is the highest, i.e., when the change of the bulk density occurs, it will cause a large change of the flame propagation speed.
+ 
+ 
+ 
+ 
+ \section{Strengths and Weaknesses}
+ \subsection{Strengths}
+ \begin{itemize}
+ 	\setlength{\parsep}{0ex} 
+ 	\setlength{\topsep}{2ex} 
+ 	\setlength{\itemsep}{1ex} 
+ 	\item Comprehensive Analysis of Fuel Types: This model provides a detailed examination of different fuel types and their characteristics, which is crucial for understanding wildfire dynamics.
+ 	
+ 	\item Trigger Buffer Creation: The generation of probability-based trigger buffers is an innovative approach to optimize evacuation timing.
+ 	
+ 	\item Evaluate the path width $PW(G)$ and maximum degree $D(G)$ of Graph G, to understand the computational complexity of the problem. Due to the diversity of Maui's topography and vegetation distribution, it is expected that the graph structure may be more complex, affecting the design of the problem solution.
+ 	
+ \end{itemize}
+ 
+ \subsection{Weaknesses}
+  \begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+ 	\item Assumption-based Modeling: The model relies on certain assumptions about wildfire spread, which might not always hold true in varying environmental conditions.
+ 	
+ 	\item Complexity in Data Requirement: The model requires extensive data for accurate simulation, which may not always be available, especially in less developed areas.
+ \end{itemize}
+ 
+ \section{Conclusion}
+ \begin{enumerate}[\bfseries 1.]
+ 	\setlength{\parsep}{0ex} 
+ 	\setlength{\topsep}{2ex} 
+ 	\setlength{\itemsep}{1ex} 
+ 	\item Comprehensive Wildfire Management Framework
+ 	
+ 	Our study presents a holistic approach to wildfire management, addressing crucial aspects like fire spread prediction, evacuation procedures, resource allocation, and risk assessment. This comprehensive framework is essential for effective and efficient wildfire management;
+ 	
+ 	\item Innovative Modeling Approaches
+ 	
+ 	Each model introduces innovative methods, such as the integration of traffic simulation in evacuation planning and the use of graph theory for resource allocation. These approaches demonstrate a forward-thinking strategy in tackling complex wildfire management issues;
+ 	
+ 	\item Strength in Predictive Analytics and Simulation
+ 	
+ 	The strong focus on predictive modeling and simulation, as seen in the Surface Fire Spread Model and the Risk Assessment Model, provides valuable insights into wildfire behavior and risks. These predictive tools are crucial for proactive wildfire management;
+ 	
+ 	\item Potential for Integrated Wildfire Management Systems
+ 	
+ 	Our study lays the groundwork for the development of integrated systems that could significantly enhance wildfire prediction, preparedness, and response. By combining the strengths of each model, an integrated system could offer a more cohesive approach to managing wildfire events.
+ \end{enumerate}
+
+ 
+ 
+ 
+
+\clearpage   
+\begin{thebibliography}{99}
+    \bibitem{1} Summary of Peak Wind Gusts,  https://www.weather.gov/hfo/windSummary20230809
+    \bibitem{2} https://earth.google.com/web/
+    \bibitem{3} New invasive, weedy grasses discovered across Hawai'i, some pose major fire risk,  https://www.hawaii.edu/news/2023/10/13/newly-discovered-grasses-across-hawaii/
+    \bibitem{4} ONE MONTH AFTER OLINDA WILDFIRE IGNITED DAILY FIRE WATCH CONTINUES,  https://dlnr.hawaii.gov/blog/2023/09/07/nr23-142/
+    \bibitem{5} Andrews, Patricia L. "The Rothermel surface fire spread model and associated developments: A comprehensive explanation." (2018).
+	\bibitem{6} Li, Dapeng, Thomas J. Cova, and Philip E. Dennison. "Setting wildfire evacuation triggers by coupling fire and traffic simulation models: a spatiotemporal GIS approach." Fire technology 55 (2019): 617-642.
+	\bibitem{7} Zhao, Xilei, et al. "Using artificial intelligence for safe and effective wildfire evacuations." Fire technology 57 (2021): 483-485.
+	\bibitem{8} Chlebíková, Janka, and Morgan Chopin. "The firefighter problem: A structural analysis." International Symposium on Parameterized and Exact Computation. Cham: Springer International Publishing, 2014.
+
+
+\end{thebibliography}
+% \includepdf[pages={1,2}]{Memo.pdf} 
+
+\end{document}  % 结束
