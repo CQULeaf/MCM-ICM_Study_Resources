@@ -1,0 +1,190 @@
+分点描述：
+一、实心圆点：
+\textbf{加粗字体}
+\begin{itemize}
+	\setlength{\parsep}{0ex} 
+	\setlength{\topsep}{2ex} 
+	\setlength{\itemsep}{1ex} 
+	\item 
+	\item 
+	\item 
+\end{itemize}
+
+二、前用序号引出要点：1. 2. 3.
+\begin{enumerate}[\bfseries 1.]
+	\setlength{\parsep}{0ex} %段落间距
+	\setlength{\topsep}{0.5pt} %列表到上下文的垂直距离
+	\setlength{\itemsep}{0.5pt} %条目间距
+	\item 
+	\item 
+	\item 
+\end{enumerate}
+
+三、前用带括号的序号引出要点：1) 2) 3)
+\begin{enumerate}[\bfseries 1)]
+	\setlength{\parsep}{0ex} %段落间距
+	\setlength{\topsep}{0.5pt} %列表到上下文的垂直距离
+	\setlength{\itemsep}{0.5pt} %条目间距
+	\item 
+	\item 
+	\item 
+\end{enumerate}
+
+三、其他的标记分点：\usepackage{amssymb}
+\begin{itemize}
+	\item[-] The major idea is...
+	\item[$\diamondsuit$] The major idea is...
+	\item[$\bigstar$] The major idea is...
+	\item[$\blacklozenge$] The major idea is...
+	\item[$\blacktriangleright$] The major idea is...
+\end{itemize}
+
+插入图片：如果需要图紧跟在文字下面，浮动体用[H]
+\ref{pic}
+\begin{figure}[htbp]  %h此处，t页顶，b页底，p独立一页，浮动体出现的位置
+	\centering  %图表居中
+	\includegraphics[width=.8\textwidth]{图片名称.格式} %图片的名称或者路径之中有空格会出问题  %.8用来调整图片大小
+	\caption{图片标题}  
+	\label{pic}
+\end{figure}
+\vspace{-0.5cm}
+
+
+假设模版：Assumption 1:
+\begin{enumerate}[\bfseries \textit{Assumption} 1:]
+	\item \textbf{假设一}\\
+	\textbf{\textit{Explanation:}} 解释
+	\item \textbf{假设二}\\
+	\textbf{\textit{Explanation:}} 解释
+	\item \textbf{假设三}\\
+	\textbf{\textit{Explanation:}} 解释
+	\item \textbf{假设四}\\
+	\textbf{\textit{Explanation:}} 解释
+\end{enumerate}
+
+三线表：Notations
+\ref{tab}
+\begin{table}[htbp]
+	\begin{center}
+		\caption{Notations}
+		\begin{tabular}{m{1.5cm} m{12.1cm}}%具体数字依照具体情况更改
+			\toprule[2pt]
+			\multicolumn{1}{m{2.7cm}}{\centering Symbol}%具体数字依照具体情况更改
+			&\multicolumn{1}{m{12cm}}{\centering Description }\\%具体数字依照具体情况更改
+			\midrule
+			$\mu$& The constant term \\
+			\vspace{2pt}
+			$\epsilon_t$& The error term \\
+			\vspace{2pt}
+			$\gamma_i$& Autocorrelation coefficient \\
+			\vspace{2pt}
+			$y_{t-i}$& Historical reported data
+			\vspace{2pt}
+		    $\theta_i$& Correlation coefficient
+		    \vspace{2pt}
+		    $\epsilon_{t-i}$& Historical reported data
+		    \vspace{2pt}
+		    $y_{t-i}$& Historical data error
+		    \vspace{2pt}
+		    $n$& Sample size
+		    \vspace{2pt}
+		    $L$& The great likelihood function
+		    \vspace{2pt}
+		    $K$& Number of model parameters
+		    \vspace{2pt}
+		    $t$& Number of tries
+		    \vspace{2pt}
+		    $p_i$& Percentage corresponding to the different number of tries
+		    \vspace{2pt}
+		    $\lambda_{max}$& The maximum eigenvalue of the judgment matrix
+		    \vspace{2pt}
+		    $n$& The order of the judgment matrix
+		    \vspace{2pt}
+		    $w_i$& Weights of neuron
+		    \vspace{2pt}
+		    $w_i$& Weighted sum of the input signals
+		    \vspace{2pt}
+		    $\theta_{(i)}$& Threshold
+		    \vspace{2pt}
+		    $f$& Activation function
+		    \vspace{2pt}
+		    $w_i$& Weights of neuron
+		    \vspace{2pt}
+		    $w_i$& Weights of neuron
+		    
+		    
+			\\%字后一行下面没有vspace
+			
+			\bottomrule[2pt]
+		\end{tabular}
+		\label{tab}
+		
+		\begin{tablenotes}%以下需要notes才加
+			\footnotesize
+			\item[*] *There are some variables that are not listed here and will be discussed in detail in each section. %此处加入注释*信息
+		\end{tablenotes}
+	\end{center}
+\end{table}
+
+引用参考文献：
+\cite{第几条}
+
+编号的行间公式一个公式，一个号：
+\begin{equation}
+	公式
+\end{equation}
+
+编号的行间公式多个公式，一个号：
+\begin{equation}
+	\begin{aligned}
+		& 公式一 \\
+		& 公式二
+	\end{aligned}
+\end{equation}
+
+编号的行间公式多个公式大括号括起来，一个号：
+\begin{equation}
+	\begin{cases}
+		\begin{aligned}
+			& 公式一 \\
+			& 公式二  \\
+			& 公式三
+		\end{aligned}
+	\end{cases}
+\end{equation}
+
+不编号的二级标题：
+\subsubsection*{标题}
+
+参考文献：MLA
+\clearpage   %另起一页继续写。
+\begin{thebibliography}{99}
+	\bibitem{1} 
+	\bibitem{2} 
+	\bibitem{3} 
+	\bibitem{4} 
+	\bibitem{5} 
+\end{thebibliography}
+
+两张图片并排显示：
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{float} 
+%\usepackage{subfigure}
+\usepackage{subcaption}
+\begin{figure}[htbp]
+	\centering
+	\begin{minipage}{0.49\linewidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{pic4}
+		\caption{chutian1}
+		\label{chutian1}%文中引用该图片代号
+	\end{minipage}
+	%\qquad
+	\begin{minipage}{0.49\linewidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{pic5}
+		\caption{chutian2}
+		\label{chutian2}%文中引用该图片代号
+	\end{minipage}
+\end{figure}
