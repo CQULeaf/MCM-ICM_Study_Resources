@@ -6,6 +6,13 @@
 
 ## 快速导航
 
+- [数学建模美赛资料](#数学建模美赛资料)
+  - [快速导航](#快速导航)
+  - [资料分布说明](#资料分布说明)
+    - [备赛学习资料（MCM Preparation Material）](#备赛学习资料mcm-preparation-material)
+    - [比赛文件合集（MCM Papers Archive）](#比赛文件合集mcm-papers-archive)
+  - [相关链接](#相关链接)
+
 ---
 
 ## 资料分布说明
