@@ -44,3 +44,4 @@
 1. [重庆大学数学实验课程](https://github.com/CQULeaf/MathExperiment_Course_Resources)：针对性学习数学模型的建立以及使用`Python`求解数学模型与绘图可视化。
 2. [重庆大学机器学习课程](https://github.com/CQULeaf/MachineLearning_Course_Resources)：针对性学习机器学习知识，数模比赛中广泛使用机器学习相关算法，再次打下一些代码与理论基础。
 3. [重庆大学数学建模国赛资料](https://github.com/CQULeaf/CUMCM-Resources)：类似于本仓库，整合了我所带队伍在数学建模国赛（CUMCM）备赛与比赛过程中使用到的相关的资料文件，最终国赛获得了国家级二等奖优异成绩。
+4. [建模手百页手写笔记](https://pan.baidu.com/s/1dEBOaDnWhjVmMOPJFnfcXA?pwd=x2c8)：队伍建模手一年以来备赛比赛过程中记录的一百多页 PDF 手写笔记。
